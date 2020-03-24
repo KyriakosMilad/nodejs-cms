@@ -5,6 +5,9 @@ const path = require('path');
 
 const app = express();
 
+const homeRoutes = require('./routes/home');
+const adminRoutes = require('./routes/admin');
+
 app.engine(
 	'hbs',
 	hbs({
@@ -20,8 +23,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.listen(3000);
+app.use(homeRoutes);
+app.use(adminRoutes);
 
-app.get('/', (req, res) => {
-	res.render('home/index', { title: 'Homepage -- all posts' });
+app.use((req, res) => {
+	res.render('error', { title: 'Error 404 page not found.' });
 });
+
+app.listen(3000);
