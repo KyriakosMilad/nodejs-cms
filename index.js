@@ -23,5 +23,5 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.listen(3000);
 
 app.get('/', (req, res) => {
-	res.render('home/index', { title: 'hello there' });
+	res.render('home/index', { title: 'Homepage -- all posts' });
 });
