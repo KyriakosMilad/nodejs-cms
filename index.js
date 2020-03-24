@@ -3,6 +3,8 @@ const hbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const path = require('path');
 
+const sequelize = require('./helpers/database');
+
 const app = express();
 
 const homeRoutes = require('./routes/home');
@@ -27,7 +29,25 @@ app.use(homeRoutes);
 app.use(adminRoutes);
 
 app.use((req, res) => {
-	res.render('error', { title: 'Error 404 page not found.' });
+	res.status(404).render('error', { title: 'Error 404 page not found.' });
 });
 
-app.listen(3000);
+// sequelize
+// 	.sync()
+// 	.then(result => {
+// 		console.log(result);
+// 		app.listen(3000);
+// 	})
+// 	.catch(err => {
+// 		console.log(err);
+// 	});
+
+sequelize    
+  .sync()
+  .then(() => {    
+		console.log('Connection has been established successfully.'); 
+		app.listen(3000);  
+  })    
+  .catch(err => {    
+    console.error('Unable to connect to the database:', err);    
+  });    

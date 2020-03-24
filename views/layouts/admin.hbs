@@ -204,9 +204,37 @@
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<ul class="nav navbar-nav side-nav">
 						<li>
-							<a href="index.html"
-								><i class="fa fa-fw fa-dashboard"></i> Dashboard</a
+							<a href="/admin"
+								><i class="fa fa-fw fa-dashboard"></i> Control Panel</a
 							>
+						</li>
+						<li>
+							<a href="javascript:;" data-toggle="collapse" data-target="#postsDD"
+								> Posts
+								<i class="fa fa-fw fa-caret-down"></i
+							></a>
+							<ul id="postsDD" class="collapse">
+								<li>
+									<a href="/admin/posts/create">Create Post</a>
+								</li>
+								<li>
+									<a href="/admin/posts">All Posts</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="javascript:;" data-toggle="collapse" data-target="#usersDD"
+								> Users
+								<i class="fa fa-fw fa-caret-down"></i
+							></a>
+							<ul id="usersDD" class="collapse">
+								<li>
+									<a href="/admin/users/create">Create User</a>
+								</li>
+								<li>
+									<a href="/admin/users">All Users</a>
+								</li>
+							</ul>
 						</li>
 						<li>
 							<a href="charts.html"
