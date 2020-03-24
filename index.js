@@ -32,16 +32,6 @@ app.use((req, res) => {
 	res.status(404).render('error', { title: 'Error 404 page not found.' });
 });
 
-// sequelize
-// 	.sync()
-// 	.then(result => {
-// 		console.log(result);
-// 		app.listen(3000);
-// 	})
-// 	.catch(err => {
-// 		console.log(err);
-// 	});
-
 sequelize    
   .sync()
   .then(() => {    
