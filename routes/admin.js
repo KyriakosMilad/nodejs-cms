@@ -11,6 +11,7 @@ const adminUsersController = require('../controllers/adminUsersController');
 router.get('/admin', adminController.getAdminPage);
 router.get('/admin/posts/create', adminController.getAdminCreatePost);
 
+router.get('/admin/users', adminUsersController.getUsersPage);
 router.get('/admin/users/create', adminUsersController.getCreateUser);
 router.post(
 	'/admin/users/create',

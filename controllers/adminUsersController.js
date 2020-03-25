@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator');
 
 exports.getCreateUser = (req, res) => {
-	res.render('admin/createUser', {
+	res.render('admin/users/createUser', {
 		title: 'Admin - Create User',
 		layout: 'admin',
 		old: {
@@ -49,4 +49,22 @@ exports.createUser = (req, res) => {
 				});
 		}
 	});
+};
+
+exports.getUsersPage = (req, res) => {
+	// console.log('users: ', User.findAll());
+	// console.log('All users:', JSON.stringify(User.findAll(), null, 2));
+	User.findAll({
+		raw: true
+	})
+		.then(users => {
+			return res.render('admin/users/allUsers', {
+				title: 'Admin - All User',
+				layout: 'admin',
+				users: users
+			});
+		})
+		.catch(err => {
+			console.log(err);
+		});
 };
