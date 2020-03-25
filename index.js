@@ -4,11 +4,12 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const abort = require('./helpers/errors');
 const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 const flash = require('connect-flash');
-
 const sequelize = require('./helpers/database');
-
 const app = express();
+
+const isAuth = require('./middlewares/isAuth');
 
 const homeRoutes = require('./routes/home');
 const adminRoutes = require('./routes/admin');
@@ -27,16 +28,33 @@ app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({ extended: false }));
+
+const sessionOptions = {
+	host: 'localhost',
+	port: 3306,
+	user: 'root',
+	password: '',
+	database: 'nodejs'
+};
+
+const sessionStore = new MySQLStore(sessionOptions);
+
 app.use(
-	session({ secret: 'my secret', resave: false, saveUninitialized: false })
+	session({
+		secret: 'my secret',
+		resave: false,
+		saveUninitialized: false,
+		store: sessionStore
+	})
 );
+
 app.use(flash());
 
 app.use(homeRoutes);
-app.use('/admin', adminRoutes);
+app.use('/admin', isAuth, adminRoutes);
 
 app.use((req, res) => {
-	abort(404, res);
+	abort(req, res, 404);
 });
 
 sequelize

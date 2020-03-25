@@ -13,7 +13,8 @@ exports.getCreateUser = (req, res) => {
 			name: null,
 			email: null,
 			password: null
-		}
+		},
+		authUser: req.session.user
 	});
 };
 
@@ -29,7 +30,8 @@ exports.createUser = (req, res) => {
 				name: req.body.name,
 				email: req.body.email,
 				password: req.body.password
-			}
+			},
+			authUser: req.session.user
 		});
 	}
 	bcrypt.hash(req.body.password, 12, function(err, hashedPass) {
@@ -63,7 +65,8 @@ exports.getUsersPage = (req, res) => {
 				layout: 'admin',
 				users: users,
 				doneMsg: req.flash('doneMsg'),
-				errMsg: req.flash('errMsg')
+				errMsg: req.flash('errMsg'),
+				authUser: req.session.user
 			});
 		})
 		.catch(err => {
@@ -88,11 +91,11 @@ exports.deleteUser = (req, res) => {
 				})
 				.catch(err => {
 					console.log(err);
-					abort(500, res);
+					abort(req, res, 500);
 				});
 		})
 		.catch(err => {
 			console.log(err);
-			abort(500, res);
+			abort(req, res, 500);
 		});
 };

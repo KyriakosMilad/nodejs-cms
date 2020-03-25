@@ -1,0 +1,53 @@
+<div
+	class="card col-md-4"
+	style="float: none;
+  margin: auto;"
+>
+	<article class="card-body">
+		<h2 class="card-title text-center mb-4 mt-1">Sign in</h2>
+		<hr />
+		{{#if errMsg}}
+		<p class="text-danger text-center">{{ errMsg }}</p>
+		{{/if}}
+		<form method="POST" action="/login">
+			<div class="form-group">
+				<div class="input-group" style="width: 100%;">
+					<div class="input-group-prepend">
+						<span class="input-group-text"> <i class="fa fa-user"></i> </span>
+					</div>
+					<input
+						name="email"
+						class="form-control"
+						placeholder="Enter your email"
+						type="email"
+						value="{{ old.email }}"
+					/>
+				</div>
+				<!-- input-group.// -->
+			</div>
+			<!-- form-group// -->
+			<div class="form-group">
+				<div class="input-group" style="width: 100%;">
+					<div class="input-group-prepend">
+						<span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+					</div>
+					<input
+						class="form-control"
+						name="password"
+						placeholder="******"
+						type="password"
+						value="{{old.password}}"
+					/>
+				</div>
+				<!-- input-group.// -->
+			</div>
+			<!-- form-group// -->
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary btn-block">Login</button>
+			</div>
+			<!-- form-group// -->
+			<!-- <a class="text-center"><a href="#" class="btn">Forgot password?</a></p> -->
+		</form>
+	</article>
+</div>
+<!-- card.// -->

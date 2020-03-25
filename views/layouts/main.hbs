@@ -55,9 +55,15 @@
 						<li>
 							<a href="#">Contact</a>
 						</li>
+						{{#if isAuth }}
 						<li>
 							<a href="/admin">Admin</a>
 						</li>
+						{{else}}
+						<li>
+							<a href="/login">Login</a>
+						</li>
+						{{/if}}
 					</ul>
 				</div>
 				<!-- /.navbar-collapse -->
