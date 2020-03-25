@@ -3,6 +3,8 @@ const hbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const path = require('path');
 const abort = require('./helpers/errors');
+const session = require('express-session');
+const flash = require('connect-flash');
 
 const sequelize = require('./helpers/database');
 
@@ -25,9 +27,13 @@ app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+	session({ secret: 'my secret', resave: false, saveUninitialized: false })
+);
+app.use(flash());
 
 app.use(homeRoutes);
-app.use(adminRoutes);
+app.use('/admin', adminRoutes);
 
 app.use((req, res) => {
 	abort(404, res);

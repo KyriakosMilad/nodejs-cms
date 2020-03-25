@@ -21,6 +21,11 @@
 				{{ errMsg }}
 			</div>
 			{{/if}}
+			{{#if doneMsg}}
+			<div class="alert alert-success" role="alert">
+				{{ doneMsg }}
+			</div>
+			{{/if}}
 			{{#if users}}
 			<table class="table">
 				<thead class="thead-dark">
@@ -53,7 +58,7 @@
 							method="POST"
 							id="deleteUser{{ user.id }}"
 						>
-							<input type="hidden" value="{{ user.id }}" />
+							<input name="id" type="hidden" value="{{ user.id }}" />
 						</form>
 					</tr>
 					{{/each}}

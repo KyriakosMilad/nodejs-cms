@@ -7,14 +7,14 @@ const User = require('../models/User');
 
 const adminController = require('../controllers/adminController');
 const adminUsersController = require('../controllers/adminUsersController');
+const adminPostsController = require('../controllers/adminPostsController');
 
-router.get('/admin', adminController.getAdminPage);
-router.get('/admin/posts/create', adminController.getAdminCreatePost);
+router.get('', adminController.getAdminPage);
 
-router.get('/admin/users', adminUsersController.getUsersPage);
-router.get('/admin/users/create', adminUsersController.getCreateUser);
+router.get('/users', adminUsersController.getUsersPage);
+router.get('/users/create', adminUsersController.getCreateUser);
 router.post(
-	'/admin/users/create',
+	'/users/create',
 	check('name')
 		.isLength({ min: 3, max: 18 })
 		.withMessage('name field must be 3 letters min and 18 max'),
@@ -33,5 +33,21 @@ router.post(
 		.withMessage('Password must be 5 digits min and 64 max'),
 	adminUsersController.createUser
 );
+router.post(
+	'/users/delete',
+	check('id')
+		.exists()
+		.withMessage('something went wrong try again'),
+	body('id').custom(val => {
+		return User.findOne({ where: { id: parseInt(val) } }).then(user => {
+			if (!user) {
+				return Promise.reject('something went wrong try again');
+			}
+		});
+	}),
+	adminUsersController.deleteUser
+);
+
+router.get('/posts/create', adminPostsController.getAdminCreatePost);
 
 module.exports = router;
