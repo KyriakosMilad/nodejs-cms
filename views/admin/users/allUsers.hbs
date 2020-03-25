@@ -41,9 +41,9 @@
 							<button
 								type="button"
 								class="btn btn-danger"
-								onclick="confirmModel(deleteUser{{
+								onclick="confirmModal('deleteUser{{
 									user.id
-								}}, 'Are you sure want to delete this user?', 1)"
+								}}', 'Are you sure want to delete {{ user.name }}?', 2)"
 							>
 								DELETE
 							</button>
