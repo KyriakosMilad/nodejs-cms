@@ -28,6 +28,7 @@
 						<th scope="col">#</th>
 						<th scope="col">Name</th>
 						<th scope="col">Email</th>
+						<th scope="col">Options</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -36,6 +37,24 @@
 						<th scope="row">{{ user.id }}</th>
 						<td>{{ user.name }}</td>
 						<td>{{ user.email }}</td>
+						<td>
+							<button
+								type="button"
+								class="btn btn-danger"
+								onclick="confirmModel(deleteUser{{
+									user.id
+								}}, 'Are you sure want to delete this user?', 1)"
+							>
+								DELETE
+							</button>
+						</td>
+						<form
+							action="/admin/users/delete"
+							method="POST"
+							id="deleteUser{{ user.id }}"
+						>
+							<input type="hidden" value="{{ user.id }}" />
+						</form>
 					</tr>
 					{{/each}}
 				</tbody>

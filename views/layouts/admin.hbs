@@ -22,6 +22,10 @@
 			type="text/css"
 		/>
 
+		<!-- Custom styles -->
+
+		<link rel="stylesheet" href="/admin/css/main.css" />
+
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
@@ -209,9 +213,12 @@
 							>
 						</li>
 						<li>
-							<a href="javascript:;" data-toggle="collapse" data-target="#postsDD"
-								> Posts
-								<i class="fa fa-fw fa-caret-down"></i
+							<a
+								href="javascript:;"
+								data-toggle="collapse"
+								data-target="#postsDD"
+							>
+								Posts <i class="fa fa-fw fa-caret-down"></i
 							></a>
 							<ul id="postsDD" class="collapse">
 								<li>
@@ -223,9 +230,12 @@
 							</ul>
 						</li>
 						<li>
-							<a href="javascript:;" data-toggle="collapse" data-target="#usersDD"
-								> Users
-								<i class="fa fa-fw fa-caret-down"></i
+							<a
+								href="javascript:;"
+								data-toggle="collapse"
+								data-target="#usersDD"
+							>
+								Users <i class="fa fa-fw fa-caret-down"></i
 							></a>
 							<ul id="usersDD" class="collapse">
 								<li>
@@ -265,10 +275,23 @@
 		</div>
 		<!-- /#wrapper -->
 
+		<!-- confirmation modal -->
+		<div id="confModal" class="modal" style="display: block;">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<span class="close" id="modalClose">&times;</span>
+				<p id="confModalText">Some text in the Modal..</p>
+				<button id="confModalSubmit" type="button" class="btn"></button>
+			</div>
+		</div>
+
 		<!-- jQuery -->
 		<script src="/admin/js/jquery.js"></script>
 
 		<!-- Bootstrap Core JavaScript -->
 		<script src="/admin/js/bootstrap.min.js"></script>
+
+		<!-- Custom script -->
+		<script src="/admin/js/main.js"></script>
 	</body>
 </html>
