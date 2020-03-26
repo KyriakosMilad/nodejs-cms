@@ -48,6 +48,8 @@ router.post(
 	adminUsersController.deleteUser
 );
 
+router.get('/posts', adminPostsController.getAdminPosts);
 router.get('/posts/create', adminPostsController.getAdminCreatePost);
+router.post('/posts/create', check('title').exists().not().isEmpty().withMessage('Title required'), check('bio').exists().not().isEmpty().withMessage('Descripetion required'), adminPostsController.adminCreatePost);
 
 module.exports = router;

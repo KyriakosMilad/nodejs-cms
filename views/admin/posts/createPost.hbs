@@ -7,7 +7,9 @@
 					Create New Post
 				</h1>
 				<ol class="breadcrumb">
-					<li><i class="fa fa-dashboard"></i> <a href="/">Dashboard</a></li>
+					<li>
+						<i class="fa fa-dashboard"></i> <a href="/admin">Dashboard</a>
+					</li>
 					<li>
 						<a href="/admin/posts">Posts</a>
 					</li>
@@ -17,6 +19,16 @@
 		</div>
 		<!-- /.row -->
 		<div class="row" style="padding: 20px;">
+			{{#if errMsg}}
+			<div class="alert alert-danger" role="alert">
+				{{ errMsg }}
+			</div>
+			{{/if}}
+			{{#if doneMsg}}
+			<div class="alert alert-success" role="alert">
+				{{ doneMsg }}
+			</div>
+			{{/if}}
 			<form action="/admin/posts/create" method="POST">
 				<div class="form-group">
 					<label for="title">Title</label>
@@ -25,6 +37,8 @@
 						class="form-control"
 						id="title"
 						placeholder="Enter title"
+						name="title"
+						value="{{ old.title }}"
 					/>
 					<!-- <small id="emailHelp" class="form-text text-muted"
 						>We'll never share your email with anyone else.</small
@@ -38,7 +52,9 @@
 						id="description"
 						placeholder="Enter description"
 						rows="4"
-					></textarea>
+						name="bio"
+						>{{ old.bio }}</textarea
+					>
 				</div>
 				<button type="submit" class="btn btn-primary">Submit</button>
 			</form>

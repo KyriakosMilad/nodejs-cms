@@ -45,11 +45,12 @@ exports.createUser = (req, res) => {
 				password: hashedPass
 			})
 				.then(data => {
-					// console.log(data);
+					req.session.flash('doneMsg', 'User Created Successfuly');
 					return res.redirect('/admin/users');
 				})
 				.catch(err => {
 					console.log(err);
+					abort(req, res, 500);
 				});
 		}
 	});
@@ -71,6 +72,7 @@ exports.getUsersPage = (req, res) => {
 		})
 		.catch(err => {
 			console.log(err);
+			abort(req, res, 500);
 		});
 };
 

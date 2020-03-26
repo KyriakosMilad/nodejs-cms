@@ -9,6 +9,8 @@ const flash = require('connect-flash');
 const sequelize = require('./helpers/database');
 const app = express();
 
+const User = require('./models/User');
+
 const isAuth = require('./middlewares/isAuth');
 
 const homeRoutes = require('./routes/home');
@@ -58,8 +60,14 @@ app.use((req, res) => {
 });
 
 sequelize
+	// .sync({ force: true })
 	.sync()
 	.then(() => {
+		// User.create({
+		// 	name: 'Kyriakos Milad',
+		// 	email: 'k@k.a',
+		// 	password: '$2b$12$cN7t12YkS.zBE4Xa9RgeVuUIPU26C0dYnl7tdZXtwEeK03dzB0wWq'
+		// });
 		console.log('Connection has been established successfully.');
 		app.listen(3000);
 	})
