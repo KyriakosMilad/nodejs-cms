@@ -20,10 +20,10 @@ const adminRoutes = require('./routes/admin');
 
 const storageOptions = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, 'images')
+		cb(null, 'images');
 	},
 	filename: (req, file, cb) => {
-		cb(null, new Date().toISOString() + '_' + file.originalname)
+		cb(null, new Date().toISOString() + '_' + file.originalname);
 	}
 });
 
@@ -45,6 +45,18 @@ app.engine(
 		helpers: {
 			dateToHumans: function(date) {
 				return moment(date).format('MMMM Do YYYY, h:mm:ss a');
+			},
+			ifNextPage: function(allPosts, postsPerPage, currentPage, options) {
+				if(allPosts > postsPerPage * currentPage) {
+					return options.fn(this);
+				}
+				return options.inverse(this);
+			},
+			ifBiggerThanOrEquial: function(first, secound, options) {
+				if(first >= secound) {
+					return options.fn(this);
+				}
+				return options.inverse(this);
 			}
 		}
 	})

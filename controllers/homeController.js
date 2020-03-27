@@ -4,14 +4,37 @@ const User = require('../models/User');
 const Post = require('../models/Post');
 
 exports.getHomePage = (req, res) => {
+	let currentPage;
+	let postsCount;
+	const POSTS_PER_PAGE = 7;
+	Post.countDocuments((err, count) => {
+		if (!err) {
+			postsCount = count;
+		} else {
+			console.log(err);
+			abort(req, res, 500);
+		}
+	});
+	if (req.query.page && req.query.page >= 1) {
+		currentPage = parseInt(req.query.page);
+	} else {
+		currentPage = 1;
+	}
 	Post.find()
+		.skip((currentPage - 1) * POSTS_PER_PAGE)
+		.limit(POSTS_PER_PAGE)
 		.populate('userId')
 		.lean()
 		.then(posts => {
 			res.render('home/index', {
 				title: 'Homepage -- all posts',
 				isAuth: req.session.isAuth,
-				posts: posts
+				posts: posts,
+				prevPage: currentPage - 1,
+				nextPage: currentPage + 1,
+				currentPage: currentPage,
+				postsPerPage: POSTS_PER_PAGE,
+				allPosts: postsCount
 			});
 		})
 		.catch(err => {

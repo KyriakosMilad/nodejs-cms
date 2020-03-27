@@ -6,12 +6,12 @@
 			{{#if posts}}
 			<h1 class="page-header">
 				All Posts
-				<small>Page 1</small>
+				<small>Page {{ currentPage }}</small>
 			</h1>
 			{{else}}
 			<h1 class="page-header">
-				All Posts
-				<small>There is no public posts yet!</small>
+				There is no posts on this page
+				<small>Page: {{ currentPage }}</small>
 			</h1>
 			{{/if}}
 
@@ -27,7 +27,7 @@
 			</p>
 			<p>
 				<span class="glyphicon glyphicon-time"></span> Posted on
-				{{ dateToHumans '2020-03-27T15:00:14.611+00:00' }}
+				{{ dateToHumans post.createdAt }}
 			</p>
 			<hr />
 			<img
@@ -48,14 +48,18 @@
 			{{/if}}
 			<!-- Pager -->
 			<ul class="pager">
-				{{#if posts}}
+				{{#ifBiggerThanOrEquial currentPage 1}}
+				{{#if prevPage}}
 				<li class="previous">
-					<a href="#">&larr; Older</a>
-				</li>
-				<li class="next">
-					<a href="#">Newer &rarr;</a>
+					<a href="?page={{ prevPage }}">&larr; Older</a>
 				</li>
 				{{/if}}
+				{{#ifNextPage allPosts postsPerPage currentPage}}
+				<li class="next">
+					<a href="?page={{ nextPage }}">Newer &rarr;</a>
+				</li>
+				{{/ifNextPage}}
+				{{/ifBiggerThanOrEquial}}
 			</ul>
 		</div>
 
