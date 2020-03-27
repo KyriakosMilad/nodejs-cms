@@ -44,9 +44,10 @@ exports.createUser = (req, res) => {
 				email: req.body.email,
 				password: hashedPass
 			});
-			newUser.save()
+			newUser
+				.save()
 				.then(data => {
-					req.session.flash('doneMsg', 'User Created Successfuly');
+					req.flash('doneMsg', 'User Created Successfuly');
 					return res.redirect('/admin/users');
 				})
 				.catch(err => {
@@ -58,10 +59,10 @@ exports.createUser = (req, res) => {
 };
 
 exports.getUsersPage = (req, res) => {
-	User.findAll({
-		raw: true
-	})
+	User.find()
+		.lean()
 		.then(users => {
+			console.log(users);
 			return res.render('admin/users/allUsers', {
 				title: 'Admin - All User',
 				layout: 'admin',
@@ -84,18 +85,10 @@ exports.deleteUser = (req, res) => {
 		req.flash('errMsg', errors.array()[0].msg);
 		return res.redirect('/admin/users');
 	}
-	User.findOne({ where: { id: req.body.id } })
+	User.findOneAndDelete({ id: req.body.id })
 		.then(user => {
-			user
-				.destroy()
-				.then(user => {
-					req.flash('doneMsg', 'User Deleted Successfuly');
-					return res.redirect('/admin/users');
-				})
-				.catch(err => {
-					console.log(err);
-					abort(req, res, 500);
-				});
+			req.flash('doneMsg', 'User Deleted Successfuly');
+			return res.redirect('/admin/users');
 		})
 		.catch(err => {
 			console.log(err);
