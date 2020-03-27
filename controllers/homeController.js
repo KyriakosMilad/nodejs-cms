@@ -1,12 +1,23 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const Post = require('../models/Post');
 
 exports.getHomePage = (req, res) => {
-	res.render('home/index', {
-		title: 'Homepage -- all posts',
-		isAuth: req.session.isAuth
-	});
+	Post.find()
+		.populate('userId')
+		.lean()
+		.then(posts => {
+			res.render('home/index', {
+				title: 'Homepage -- all posts',
+				isAuth: req.session.isAuth,
+				posts: posts
+			});
+		})
+		.catch(err => {
+			console.log(err);
+			abort(req, res, 500);
+		});
 };
 
 exports.getLoginPage = (req, res) => {

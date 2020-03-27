@@ -7,6 +7,7 @@ const session = require('express-session');
 const mongodbSession = require('connect-mongodb-session')(session);
 const mongoose = require('mongoose');
 const flash = require('connect-flash');
+const moment = require('moment');
 const app = express();
 
 const User = require('./models/User');
@@ -21,7 +22,12 @@ app.engine(
 	hbs({
 		extname: 'hbs',
 		defaultLayout: 'main',
-		layoutsDir: __dirname + '/views/layouts'
+		layoutsDir: __dirname + '/views/layouts',
+		helpers: {
+			dateToHumans: function(date) {
+				return moment(date).format('MMMM Do YYYY, h:mm:ss a');
+			}
+		}
 	})
 );
 app.set('views', path.join(__dirname, 'views'));
