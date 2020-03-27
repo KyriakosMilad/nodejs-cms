@@ -4,6 +4,7 @@ const router = express.Router();
 const { check, body } = require('express-validator');
 
 const User = require('../models/User');
+const Post = require('../models/Post');
 
 const adminController = require('../controllers/adminController');
 const adminUsersController = require('../controllers/adminUsersController');
@@ -63,6 +64,21 @@ router.post(
 		.isEmpty()
 		.withMessage('Descripetion required'),
 	adminPostsController.adminCreatePost
+);
+
+router.post(
+	'/posts/delete',
+	check('id')
+		.exists()
+		.withMessage('something went wrong try again'),
+	body('id').custom(val => {
+		return Post.findById(val).then(post => {
+			if (!post) {
+				return Promise.reject('something went wrong try again');
+			}
+		});
+	}),
+	adminPostsController.deletePost
 );
 
 module.exports = router;

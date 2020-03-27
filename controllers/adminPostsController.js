@@ -14,6 +14,7 @@ exports.getAdminPosts = (req, res) => {
 				isAuth: req.session.isAuth,
 				authUser: req.session.authUser,
 				doneMsg: req.flash('doneMsg'),
+				errMsg: req.flash('errMsg'),
 				posts: posts
 			});
 		})
@@ -58,9 +59,28 @@ exports.adminCreatePost = (req, res) => {
 		userId: req.session.user._id,
 		imageUrl: 'post.jpg'
 	});
-	newPost.save()
+	newPost
+		.save()
 		.then(data => {
 			req.flash('doneMsg', 'Post Created Successfuly');
+			return res.redirect('/admin/posts');
+		})
+		.catch(err => {
+			console.log(err);
+			abort(req, res, 500);
+		});
+};
+
+exports.deletePost = (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		console.log('err found ', errors.array());
+		req.flash('errMsg', errors.array()[0].msg);
+		return res.redirect('/admin/posts');
+	}
+	Post.findByIdAndDelete(req.body.id)
+		.then(post => {
+			req.flash('doneMsg', 'Post Deleted Successfuly');
 			return res.redirect('/admin/posts');
 		})
 		.catch(err => {
