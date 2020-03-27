@@ -18,7 +18,9 @@
 		"express-validator": "^6.4.0",
 		"moment": "^2.24.0",
 		"mongodb": "^3.5.5",
-		"mongoose": "^5.9.6"
+		"mongoose": "^5.9.6",
+		"move-file": "^1.2.0",
+		"multer": "^1.4.2"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.2"

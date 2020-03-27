@@ -8,6 +8,7 @@ const mongodbSession = require('connect-mongodb-session')(session);
 const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const moment = require('moment');
+const multer = require('multer');
 const app = express();
 
 const User = require('./models/User');
@@ -16,6 +17,24 @@ const isAuth = require('./middlewares/isAuth');
 
 const homeRoutes = require('./routes/home');
 const adminRoutes = require('./routes/admin');
+
+const storageOptions = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, 'images')
+	},
+	filename: (req, file, cb) => {
+		cb(null, new Date().toISOString() + '_' + file.originalname)
+	}
+});
+
+const MONGO_URI = 'mongodb://127.0.0.1:27017/cms';
+
+const sessionOptions = {
+	uri: MONGO_URI,
+	collection: 'sessions'
+};
+
+const sessionStore = new mongodbSession(sessionOptions);
 
 app.engine(
 	'hbs',
@@ -36,15 +55,7 @@ app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({ extended: false }));
-
-const MONGO_URI = 'mongodb://127.0.0.1:27017/cms';
-
-const sessionOptions = {
-	uri: MONGO_URI,
-	collection: 'sessions'
-};
-
-const sessionStore = new mongodbSession(sessionOptions);
+app.use(multer({ storage: storageOptions }).single('file'));
 
 app.use(
 	session({
