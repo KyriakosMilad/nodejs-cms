@@ -4,17 +4,17 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const abort = require('./helpers/errors');
 const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
+const mongodbSession = require('connect-mongodb-session')(session);
+const mongoose = require('mongoose');
 const flash = require('connect-flash');
-const sequelize = require('./helpers/database');
 const app = express();
 
-const User = require('./models/User');
+// const User = require('./models/User');
 
 const isAuth = require('./middlewares/isAuth');
 
 const homeRoutes = require('./routes/home');
-const adminRoutes = require('./routes/admin');
+// const adminRoutes = require('./routes/admin');
 
 app.engine(
 	'hbs',
@@ -31,15 +31,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+const MONGO_URI = 'mongodb://127.0.0.1:27017/cms';
+
 const sessionOptions = {
-	host: 'localhost',
-	port: 3306,
-	user: 'root',
-	password: '',
-	database: 'nodejs'
+	uri: MONGO_URI,
+	collection: 'sessions'
 };
 
-const sessionStore = new MySQLStore(sessionOptions);
+const sessionStore = new mongodbSession(sessionOptions);
 
 app.use(
 	session({
@@ -53,24 +52,19 @@ app.use(
 app.use(flash());
 
 app.use(homeRoutes);
-app.use('/admin', isAuth, adminRoutes);
+// app.use('/admin', isAuth, adminRoutes);
 
 app.use((req, res) => {
 	abort(req, res, 404);
 });
 
-sequelize
-	// .sync({ force: true })
-	.sync()
-	.then(() => {
-		// User.create({
-		// 	name: 'Kyriakos Milad',
-		// 	email: 'k@k.a',
-		// 	password: '$2b$12$cN7t12YkS.zBE4Xa9RgeVuUIPU26C0dYnl7tdZXtwEeK03dzB0wWq'
-		// });
-		console.log('Connection has been established successfully.');
+mongoose
+	.connect(MONGO_URI)
+	.then(res => {
+		
+		console.log(res);
 		app.listen(3000);
 	})
 	.catch(err => {
-		console.error('Unable to connect to the database:', err);
+		console.log(err);
 	});
