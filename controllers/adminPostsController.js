@@ -4,12 +4,10 @@ const abort = require('../helpers/errors');
 const { validationResult } = require('express-validator');
 
 exports.getAdminPosts = (req, res) => {
-	Post.findAll({
-		// raw: true,
-		include: 'user'
-	})
+	Post.find()
+		.populate('userId')
+		.lean()
 		.then(posts => {
-			console.log(posts);
 			return res.render('admin/posts/allPosts', {
 				title: 'Admin - All Posts',
 				layout: 'admin',
@@ -23,10 +21,6 @@ exports.getAdminPosts = (req, res) => {
 			console.log(err);
 			abort(req, res, 500);
 		});
-	// const posts = await Post.findAll({
-	// 	include: 'user'
-	// });
-	// console.log(posts);
 };
 
 exports.getAdminCreatePost = (req, res) => {
@@ -58,11 +52,13 @@ exports.adminCreatePost = (req, res) => {
 			authUser: req.session.user
 		});
 	}
-	Post.create({
+	const newPost = new Post({
 		title: req.body.title,
 		bio: req.body.bio,
-		userId: req.session.user.id
-	})
+		userId: req.session.user._id,
+		imageUrl: 'post.jpg'
+	});
+	newPost.save()
 		.then(data => {
 			req.flash('doneMsg', 'Post Created Successfuly');
 			return res.redirect('/admin/posts');

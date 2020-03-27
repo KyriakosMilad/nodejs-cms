@@ -42,16 +42,16 @@
 				<tbody>
 					{{#each posts as |post key|}}
 					<tr>
-						<th scope="row">{{ post.dataValues.id }}</th>
-						<td>{{ post.dataValues.title }}</td>
-						<td>{{ post.dataValues.bio }}</td>
-						<td>{{ post.dataValues.user }}</td>
+						<th scope="row">{{ key }}</th>
+						<td>{{ post.title }}</td>
+						<td>{{ post.bio }}</td>
+						<td>{{ post.userId.name }}</td>
 						<td>
 							<button
 								type="button"
 								class="btn btn-danger"
 								onclick="confirmModal('deletePost{{
-									post.id
+									post._id
 								}}', 'Are you sure want to delete {{ post.title }}?', 2)"
 							>
 								DELETE
@@ -60,9 +60,9 @@
 						<form
 							action="/admin/posts/delete"
 							method="POST"
-							id="deletePost{{ post.id }}"
+							id="deletePost{{ post._id }}"
 						>
-							<input name="id" type="hidden" value="{{ post.id }}" />
+							<input name="id" type="hidden" value="{{ post._id }}" />
 						</form>
 					</tr>
 					{{/each}}
