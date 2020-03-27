@@ -85,7 +85,7 @@ exports.deleteUser = (req, res) => {
 		req.flash('errMsg', errors.array()[0].msg);
 		return res.redirect('/admin/users');
 	}
-	User.findOneAndDelete({ id: req.body.id })
+	User.findByIdAndDelete(req.body.id)
 		.then(user => {
 			req.flash('doneMsg', 'User Deleted Successfuly');
 			return res.redirect('/admin/users');

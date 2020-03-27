@@ -22,7 +22,7 @@ router.post(
 		.isEmail()
 		.withMessage('make sure entering a valid email'),
 	body('email').custom(val => {
-		return User.findOne({ where: { email: val } }).then(user => {
+		return User.findOne({ email: val }).then(user => {
 			if (user) {
 				return Promise.reject('E-mail already in use');
 			}
@@ -39,7 +39,7 @@ router.post(
 		.exists()
 		.withMessage('something went wrong try again'),
 	body('id').custom(val => {
-		return User.findOne({ where: { id: parseInt(val) } }).then(user => {
+		return User.findById(val).then(user => {
 			if (!user) {
 				return Promise.reject('something went wrong try again');
 			}
