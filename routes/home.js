@@ -31,7 +31,11 @@ router.post(
 router.post('/logout', isAuth, (req, res) => {
 	req.session.user = null;
 	req.session.isAuth = false;
+	req.session.destroy();
+	res.clearCookie('connect.sid', { path: '/' });
 	res.redirect('/');
 });
+
+router.get('/posts/:postid', homeController.getPostPage);
 
 module.exports = router;

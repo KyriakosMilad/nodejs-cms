@@ -44,6 +44,17 @@ exports.getHomePage = (req, res) => {
 };
 
 exports.getLoginPage = (req, res) => {
+	if (req.session.isAuth) {
+		return res.redirect('/admin');
+	} else {
+		return res.render('home/login', {
+			title: 'Login',
+			old: {
+				email: null,
+				password: null
+			}
+		});
+	}
 	res.render('home/login', {
 		title: 'Login',
 		old: {
@@ -54,48 +65,76 @@ exports.getLoginPage = (req, res) => {
 };
 
 exports.login = (req, res) => {
-	const errors = validationResult(req);
-	if (!errors.isEmpty()) {
-		return res.status(422).render('home/login', {
-			title: 'Login',
-			errMsg: errors.array()[0].msg,
-			old: {
-				email: req.body.email,
-				password: req.body.password
-			}
+	if (req.session.isAuth) {
+		abort(req, res, 500);
+	} else {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(422).render('home/login', {
+				title: 'Login',
+				errMsg: errors.array()[0].msg,
+				old: {
+					email: req.body.email,
+					password: req.body.password
+				}
+			});
+		}
+		User.findOne({ email: req.body.email }).then(user => {
+			bcrypt.compare(req.body.password, user.password, (err, result) => {
+				if (!result) {
+					return res.status(422).render('home/login', {
+						title: 'Login',
+						errMsg: 'make sure entering valid password',
+						old: {
+							email: req.body.email,
+							password: req.body.password
+						}
+					});
+				} else {
+					if (req.body.remember == 1) {
+						req.session.cookie.maxAge = 31556952000;
+					}
+					req.session.isAuth = true;
+					req.session.user = user;
+					req.session.save(err => {
+						if (err) {
+							console.log(err);
+							return res.status(400).render('home/login', {
+								title: 'Login',
+								errMsg: 'something went wrong try again',
+								old: {
+									email: req.body.email,
+									password: req.body.password
+								}
+							});
+						} else {
+							req.flash('done', 'logged you in successfuly!');
+							return res.redirect('/admin');
+						}
+					});
+				}
+			});
 		});
 	}
-	User.findOne({ email: req.body.email }).then(user => {
-		bcrypt.compare(req.body.password, user.password, (err, result) => {
-			if (!result) {
-				return res.status(422).render('home/login', {
-					title: 'Login',
-					errMsg: 'make sure entering valid password',
-					old: {
-						email: req.body.email,
-						password: req.body.password
-					}
-				});
-			} else {
-				req.session.isAuth = true;
-				req.session.user = user;
-				req.session.save(err => {
-					if (err) {
-						console.log(err);
-						return res.status(400).render('home/login', {
-							title: 'Login',
-							errMsg: 'something went wrong try again',
-							old: {
-								email: req.body.email,
-								password: req.body.password
-							}
-						});
-					} else {
-						req.flash('done', 'logged you in successfuly!');
-						return res.redirect('/admin');
-					}
+};
+
+exports.getPostPage = (req, res) => {
+	Post.findById(req.params.postid)
+		.populate('userId')
+		.lean()
+		.then(post => {
+			if (post != null) {
+				res.render('home/post', {
+					title: post.title,
+					post: post,
+					isAuth: req.session.isAuth
 				});
 			}
+			console.log(err);
+			abort(req, res, 500);
+		})
+		.catch(err => {
+			console.log(err);
+			abort(req, res, 500);
 		});
-	});
 };
