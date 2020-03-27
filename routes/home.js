@@ -17,8 +17,8 @@ router.post(
 		.isEmail()
 		.withMessage('make sure entering valid email'),
 	body('email').custom(val => {
-		return User.findOne({ where: { email: val } }).then(user => {
-			if (!user) {
+		return User.find({ email: val }).then(user => {
+			if (user == null) {
 				return Promise.reject('make sure entering valid email');
 			}
 		});

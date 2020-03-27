@@ -3,7 +3,10 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
 exports.getHomePage = (req, res) => {
-	res.render('home/index', { title: 'Homepage -- all posts', isAuth: req.session.isAuth });
+	res.render('home/index', {
+		title: 'Homepage -- all posts',
+		isAuth: req.session.isAuth
+	});
 };
 
 exports.getLoginPage = (req, res) => {
@@ -28,7 +31,7 @@ exports.login = (req, res) => {
 			}
 		});
 	}
-	User.findOne({ where: { email: req.body.email } }).then(user => {
+	User.findOne({ email: req.body.email }).then(user => {
 		bcrypt.compare(req.body.password, user.password, (err, result) => {
 			if (!result) {
 				return res.status(422).render('home/login', {

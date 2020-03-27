@@ -37,13 +37,14 @@ exports.createUser = (req, res) => {
 	bcrypt.hash(req.body.password, 12, function(err, hashedPass) {
 		if (err) {
 			console.log('hash err: ', err);
-			return res.redirect('/');
+			abort(req, res, 500);
 		} else {
-			User.create({
+			const newUser = new User({
 				name: req.body.name,
 				email: req.body.email,
 				password: hashedPass
-			})
+			});
+			newUser.save()
 				.then(data => {
 					req.session.flash('doneMsg', 'User Created Successfuly');
 					return res.redirect('/admin/users');
