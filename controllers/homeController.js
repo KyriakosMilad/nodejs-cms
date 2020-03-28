@@ -55,13 +55,6 @@ exports.getLoginPage = (req, res) => {
 			}
 		});
 	}
-	res.render('home/login', {
-		title: 'Login',
-		old: {
-			email: null,
-			password: null
-		}
-	});
 };
 
 exports.login = (req, res) => {
