@@ -101,7 +101,7 @@ mongoose
 						name: 'Kyriakos Milad',
 						email: 'admin@cms.com',
 						password:
-							'$2b$12$cN7t12YkS.zBE4Xa9RgeVuUIPU26C0dYnl7tdZXtwEeK03dzB0wWq'
+							'$2b$12$cN7t12YkS.zBE4Xa9RgeVuUIPU26C0dYnl7tdZXtwEeK03dzB0wWq' // never do this, i'm just exploring nodejs
 					});
 					adminUser.save();
 					console.log('User Admin created successfuly!');
